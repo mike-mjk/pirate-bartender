@@ -1,0 +1,14 @@
+form {
+	margin:auto;
+	width: 600px;
+	text-align: center;
+}
+
+div {
+	margin: 10px;
+	margin-top: 25px;
+}
+
+* {
+	font-weight: bold;
+}
