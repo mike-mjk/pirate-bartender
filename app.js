@@ -14,12 +14,29 @@ var Ingredient = function (name, category) {
 	this.category = category;
 };
 
-var Bartender = function () {
-
+var Bartender = function (preferences) {
+	this.preferences = preferences;
 };
 
-Bartender.prototype.createDrink = function (preferences) {
-	
+Bartender.prototype.createDrink = function () {
+	var drinkIngs = [];
+	$.each(this.preferences, function (ingType, preferred) {
+		if (preferred == "yes")
+			drinkIngs.push(getRandomIngredient(ingType));
+	});
+	alert("Ye buddy, you've got this drink with " + drinkIngs.map(function (v) {
+		return v.name.toLowerCase();
+	}).join(", ") + "...");
+}
+
+function getRandomIngredient(type) {
+	var ings = [];
+	for (var i = 0; i < ingredients.length; i++) {
+		if (ingredients[i].category == type) {
+			ings.push(ingredients[i]);
+		}
+	}
+	return ings[Math.floor(Math.random() * ings.length)];
 }
 
 var questions = [];
@@ -58,20 +75,21 @@ function populateQuestions(questions) {
 
 function buildPreferences() {
 	var preferences = {};
-	var categories = ['strong', 'salty', 'bitter', 'sweet', 'fruity'];
+	var categories = ['Strong', 'Salty', 'Bitter', 'Sweet', 'Fruity'];
 
 	$.each(categories, function(index, value) {
 		var checked = $("input[name=" + value +"]:checked").val();
 		preferences[value] = checked;
-
-	return preferences;
+		// console.log(preferences);
 	});
-
+	return preferences;
 };
 $( document ).ready(function() {
 	populateQuestions(questions);
 	$('.js-submit').on("click", function(e) {
 		e.preventDefault();
-		buildPreferences();
+		preferences = buildPreferences();
+		bartender = new Bartender(preferences);
+		bartender.createDrink();
 	});
 });
